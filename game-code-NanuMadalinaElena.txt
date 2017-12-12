@@ -41,29 +41,30 @@ int xPos=6,yPos=6;
 
 bool isTrue=false;
 int numberLives=3; //this variable holds the number of lives
-
+//int lastSwitchState = LOW;        // previous switch state
 
 LedControl lc=LedControl(12,11,10,1);  
 LiquidCrystal lcd(rs,E,d4,d5,d6,d7);
 
 
-
+/*
 void readJoystick(){
-  int pressed; //this variable will determine whether joystick has been pressed down (selected)
-  pressed=digitalRead(SW_pin); //reads whether joystick has been pressed down (selected) or not
+  //int pressed; //this variable will determine whether joystick has been pressed down (selected)
+ 
   if(pressed == LOW)
     {
       pressed = 0;
       isTrue=true;
     }
-/*
+
    else
    {
     pressed = 1;
    }
-*/
+
 
 } //end readJoystick()
+*/
 
 void setup() {
   //matrice
@@ -148,8 +149,19 @@ void secondStep()
     if (yVal > 200)
       if(yPos == 7)
       {
-        yPos = 0;
-        numberLives--;
+        //daca e diferit de "Won"
+        if(xPos !=6)
+        {
+          yPos = 0;
+          numberLives--;
+        }
+        //altfel ai pierdut
+        //nu e posibil sa vi prin partea opusa la iesirea din labirint
+        else
+        {
+          yPos == 6;
+          xPos == 6;
+        }
          //loveste perete
       }
       else
@@ -185,6 +197,8 @@ else
     {
       lcd.clear();
       lcd.setCursor(0,0);
+      //lcd.print(yPos + xPos);
+      //yPos=0 xPos=6;
       lcd.print("You won!");
 
     }
@@ -197,7 +211,7 @@ if(numberLives==0)
   lcd.setCursor(0,0);
   lcd.print("Game over!");
   lcd.setCursor(0,1);
-  lcd.print("Nice try!");
+  lcd.print("Keep trying");
 
 }
   
@@ -205,16 +219,22 @@ if(numberLives==0)
 }//end secondStep()
 
 void loop() {
-  
-  
+  int pressed=digitalRead(SW_pin); //reads whether joystick has been pressed down (selected) or not 
+
 if(isTrue==false)
 {
   firstStep();
-  readJoystick();//calls this function which reads the digital input button SW
+ // readJoystick();//calls this function which reads the digital input button SW
+   if(pressed == LOW)
+    {
+      isTrue=true;
+    }
 }
+//intra pe cazul isTrue=false;
 else
   {
-    secondStep();
+      secondStep();
+
   }
 }//end function loop()
 
